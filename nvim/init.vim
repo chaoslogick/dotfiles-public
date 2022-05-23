@@ -1,38 +1,40 @@
-"//-------------------------------------------------
-"// vimrc
-"//-------------------------------------------------
+"//             ██
+"//            ░░
+"//    ██    ██ ██ ██████████
+"//   ░██   ░██░██░░██░░██░░██
+"//   ░░██ ░██ ░██ ░██ ░██ ░██
+"//    ░░████  ░██ ░██ ░██ ░██
+"//     ░░██   ░██ ███ ░██ ░██
+"//      ░░    ░░ ░░░  ░░  ░░
 
+"//-------------------------------------------------
 "// plugin config
 "//-------------------------------------------------
 call plug#begin('~/.config/nvim/bundle')
   Plug 'w0rp/ale'                         " ALE, better than Syntastic
-  Plug 'skywind3000/asyncrun.vim'         " run shell commands in background
   Plug 'miyakogi/conoline.vim'            " highlights the line of the cursor
   Plug 'editorconfig/editorconfig-vim'    " maintain consistent coding styles between different editors
   Plug 'mattn/emmet-vim'                  " fast code completion
   Plug 'sjl/gundo.vim'                    " visualize your undo tree
+  Plug 'junegunn/fzf'                     " fzf fuzzy finder
   Plug 'scrooloose/nerdcommenter'         " advanced commenting
   Plug 'scrooloose/nerdtree'              " file system explorer
-  Plug 'mhartington/nvim-typescript'      " typescript syntax support
   Plug 'kien/rainbow_parentheses.vim'     " different levels of parentheses in different colors
-  Plug 'rust-lang/rust.vim'               " rust language support
-  "Plug 'rstacruz/sparkup'                " faster html completion
-  "Plug 'vim-syntastic/syntastic'         " syntax checking hacks
   Plug 'vim-airline/vim-airline'          " advanced status & tab line
   Plug 'vim-airline/vim-airline-themes'   " themes for airline
   Plug 'pangloss/vim-javascript'          " javascript syntax support
   Plug 'elzr/vim-json'                    " json syntax support
-  Plug 'mxw/vim-jsx'                      " react jsx syntax support
-  Plug 'elixir-editors/vim-elixir'        " elixir language support
-  Plug 'terryma/vim-multiple-cursors'     " sublime text style multiple cursors
   Plug 'moll/vim-node'                    " node support
   Plug 'sheerun/vim-polyglot'             " language support pack
   Plug 'vim-ruby/vim-ruby'                " ruby language support
+  Plug 'tpope/vim-rails'                  " ruby on rails tools
+  Plug 'tpope/vim-fugitive'               " git wrapper
   Plug 'tpope/vim-sensible'               " sensible defaults
   Plug 'tpope/vim-surround'               " quoting/parenthesizing made simple
+  Plug 'tpope/vim-markdown'               " markdown runtime files
   Plug 'othree/yajs.vim'                  " yet another javascript plugin
+  Plug 'posva/vim-vue'                    " vue syntax support
 call plug#end()
-
 
 "// general
 "//-------------------------------------------------
@@ -184,8 +186,11 @@ nmap <leader>w :w!<cr>
 " (useful for handling the premission-denied error)
 command! W :w !sudo tee % > /dev/null
 
+" remap ESC
+inoremap jk <ESC>
+
 " fuck everything
-nmap <leader>qq :q!<cr>
+nnoremap <leader>qq :q!<cr>
 
 " visual mode: pressing * or # searches for the current selection
 " super useful! from an idea by Michael Naumann
@@ -221,10 +226,10 @@ map j gj
 map k gk
 
 " moving lines
-nnoremap <A-j> :m .+1<CR>==
-nnoremap <A-k> :m .-2<CR>==
-inoremap <A-j> <Esc>:m .+1<CR>==gi
-inoremap <A-k> <Esc>:m .-2<CR>==gi
+nnoremap <A-k> :m .-1<CR>==
+nnoremap <A-j> :m .+2<CR>==
+inoremap <A-k> <Esc>:m .-1<CR>==gi
+inoremap <A-j> <Esc>:m .+2<CR>==gi
 vnoremap <A-j> :m '>+1<CR>gv=gv
 vnoremap <A-k> :m '<-2<CR>gv=gv"
 
@@ -316,30 +321,22 @@ map <leader>te :tabedit <c-r>=expand("%:p:h")<cr>
 
 " TODO: spell checking maps
 
-" move text around
-nnoremap <A-j> :m .+1<CR>==
-nnoremap <A-k> :m .-2<CR>==
-inoremap <A-j> <Esc>:m .+1<CR>==gi
-inoremap <A-k> <Esc>:m .-2<CR>==gi
-vnoremap <A-j> :m '>+1<CR>gv=gv
-vnoremap <A-k> :m '<-2<CR>gv=gv
-
-
 "// plugin configuration
 "//------------------------------------------------
 " airline
-let g:airline_theme='luna'
-let g:airline_powerline_fonts=0
+"let g:airline_theme='luna'
+let g:airline_theme='minimalist'
+let g:airline_powerline_fonts=1
 let g:airline#extensions#tabline#enabled=1
 let g:airline#extensions#branch#enabled=1
 let g:airline#extensions#tabline#fnamemod='%t'
 let g:airline_section_c='%t'
 
 " the separator used on the left side *
-let g:airline_left_sep='*'
+let g:airline_left_sep=':'
 
 " the separator used on the right side *
-let g:airline_right_sep='*'
+let g:airline_right_sep=':'
 
 if !exists("g:airline_symbols")
   let g:airline_symbols = {}
@@ -347,13 +344,14 @@ endif
 let g:airline_symbols.space = "\ua0"
 
 " emmet
+let g:user_emmet_install_global = 0
 let g:user_emmet_leader_key='<Tab>'
 let g:user_emmet_settings = {
   \  'javascript.jsx' : {
     \      'extends' : 'jsx',
     \  }
   \}
-"autocmd FileType html,css
+autocmd FileType html,css,js,vue EmmetInstall
 
 " NERDTree
 let g:NERDTreeWinPos='left'
@@ -367,5 +365,3 @@ let NERDTreeDirArrows=1
 map <leader>nn :NERDTreeToggle<cr>
 map <leader>nb :NERDTreeFromBookmark
 map <leader>nf :NERDTreeFind<cr>
-
-
