@@ -19,13 +19,19 @@ call plug#begin('~/.config/nvim/bundle')
   Plug 'junegunn/fzf'                     " fzf fuzzy finder
   Plug 'scrooloose/nerdcommenter'         " advanced commenting
   Plug 'scrooloose/nerdtree'              " file system explorer
+  Plug 'nvim-treesitter/nvim-treesitter'  " treesitter file update tracker
+  Plug 'nvim-treesitter/playground'       " treesitter playground option
+  Plug 'ThePrimeagen/harpoon'             " super fast file navigation
+  Plug 'nvim-lua/plenary.nvim'            " lua functions
   Plug 'kien/rainbow_parentheses.vim'     " different levels of parentheses in different colors
   Plug 'vim-airline/vim-airline'          " advanced status & tab line
   Plug 'vim-airline/vim-airline-themes'   " themes for airline
+  Plug 'vim-scripts/c.vim'                " c/c++ ide
   Plug 'pangloss/vim-javascript'          " javascript syntax support
   Plug 'elzr/vim-json'                    " json syntax support
   Plug 'moll/vim-node'                    " node support
   Plug 'sheerun/vim-polyglot'             " language support pack
+  Plug 'tbastos/vim-lua'                  " lua language support
   Plug 'vim-ruby/vim-ruby'                " ruby language support
   Plug 'tpope/vim-rails'                  " ruby on rails tools
   Plug 'tpope/vim-fugitive'               " git wrapper
@@ -34,6 +40,10 @@ call plug#begin('~/.config/nvim/bundle')
   Plug 'tpope/vim-markdown'               " markdown runtime files
   Plug 'othree/yajs.vim'                  " yet another javascript plugin
   Plug 'posva/vim-vue'                    " vue syntax support
+  Plug 'leafOfTree/vim-vue-plugin'        " more vue support
+  Plug 'hyperchaos/dracula.vim', { 'as': 'dracula' } " dracula color theme
+  Plug 'github/copilot.vim'               " github copilot
+  Plug 'APZelos/blamer.nvim'              " git blamer similar to vscode's gitlens
 call plug#end()
 
 "// general
@@ -75,12 +85,14 @@ set background=dark                " dark background
 syntax enable                      " turn on syntax highlighting
 
 " set color scheme
-"colorscheme visual-studio-dark
-colorscheme hybrid
+"colorscheme demonlord
+"colorscheme hybrid
+"colorscheme simplicity-darker
+"colorscheme simplicity-blue
+colorscheme dracula
 
 " use Unix as the standard file type
 set ffs=unix,dos,mac
-
 
 "// user interface
 "//------------------------------------------------
@@ -179,6 +191,9 @@ let mapleader=' '
 let g:mapleader=' '
 set updatetime=2000
 
+" clipboard
+"set clipboard+=unnamedplus
+
 " fast saving
 nmap <leader>w :w!<cr>
 
@@ -247,6 +262,12 @@ nnoremap <silent> <leader><space> :noh<cr>
 inoremap <F1> <ESC>
 nnoremap <F1> <ESC>
 vnoremap <F1> <ESC>
+
+" disable arrow navigation
+"noremap <Up> <Nop>
+"noremap <Down> <Nop>
+"noremap <Left> <Nop>
+"noremap <Right> <Nop>
 
 " buffer controls
 " map: <space>b
@@ -323,6 +344,9 @@ map <leader>te :tabedit <c-r>=expand("%:p:h")<cr>
 
 "// plugin configuration
 "//------------------------------------------------
+" vim plug
+nnoremap <leader>pi :PlugInstall<cr>
+
 " airline
 "let g:airline_theme='luna'
 let g:airline_theme='minimalist'
@@ -365,3 +389,12 @@ let NERDTreeDirArrows=1
 map <leader>nn :NERDTreeToggle<cr>
 map <leader>nb :NERDTreeFromBookmark
 map <leader>nf :NERDTreeFind<cr>
+
+" harpoon
+
+
+" git blamer
+let g:blamer_enabled = 1
+let g:blamer_delay = 160
+let g:blamer_show_in_visual_modes = 0
+
